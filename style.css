@@ -37,3 +37,19 @@ body {
   fill: red;
   stroke-width: 1; 
 }
+
+.chart-title
+{
+  text-align: center;
+}
+
+.country:hover{
+  background-color: #ccc;
+}
+.country{
+  padding: 6px;
+}
+
+.countries, .countries th, .countries tr, .countries td{
+  border: 1px solid #aaa;
+}

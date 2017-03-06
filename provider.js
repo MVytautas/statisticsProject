@@ -7,20 +7,23 @@ $(document).ready(function() {
 		//console.log(data);
 		geographies = data;
 
-		var tbody = document.getElementById('tbody');
+		var tbody = $('.countries tbody');
 
 		for (var i = 0; i < geographies.length; i++) {
-		    var tr = "<tr>";
-
-
-		    /* Must not forget the $ sign */
 		    var id = geographies[i].GeographyId.toString();
-		    tr += "<td onclick='openGeographyData(" + id + ")'>" + geographies[i].GeographyName.toString() + "</td>";
-
-		    /* We add the table row to the table body */
-		    tbody.innerHTML += tr;
+			var name = geographies[i].GeographyName.toString();
+			tbody
+				.append($('<tr>')
+					.append($("<td class='country'>")
+						.append($("<a href='#' class='countrylink'>")
+							.append(name)
+								.append("<input type='hidden' value='" + id + "'/>"))));
 		}
 		openGeographyData(geographies[0].GeographyId.toString());
+		$(".countrylink").click(function(){
+			var id = $( this ).find('input').val();
+			openGeographyData(id);
+		});
 	});
 	promise.fail(function(error){
 		alert(JSON.stringify(error));
@@ -29,37 +32,36 @@ $(document).ready(function() {
 
 function drawChart()
 {
-	var chart = document.getElementById('chart');
-	var years = document.getElementById('years');
-	var inflation = document.getElementById('inflation');
-	var polyLine = document.getElementById('polyLine');
-	years.innerHTML = "";
-	inflation.innerHTML = "";
-	circlePoints.innerHTML = "";
-	polyLine.setAttribute("points", "");
+	var chart = $('#chart');
+	var years = $('#years');
+	var inflation = $('#inflation');
+	var polyLine = $('#polyLine');
+	var circlePoints = $('#circlePoints');
+	var yearsHtml = "";
 	for (var i = 0; i < geography.length; i++) {
-
 		var x = 90 + 80 * i;
 		var g = "<text x="+ x +" y='425'>"+ geography[i].PeriodYear.toString() +"</text>";
-
-		years.innerHTML += g;
+		yearsHtml += g;
 	}
+	years.html(yearsHtml);
 
 	var biggestValue = findBiggestInflationPoint();
 	var lowestValue = findLowestInflationPoint();
 
+	var inflationHtml = "";
 	for (var i = 0; i < 11; i++) {
 		var y = 15 + 40 * i;
 
 		var difference = biggestValue - lowestValue;
 		var value = biggestValue - (difference / 10) * i;
 
-
 		var g = "<text x='80' y="+ y +">" + roundUp(value, 1000) +"</text>";
-		inflation.innerHTML += g;
+		inflationHtml += g;
 	}
+	inflation.html(inflationHtml);
 
 	var points = "";
+	var circlePointsHtml = "";
 	for (var i = 0; i < geography.length; i++) {
 
 		var difference = biggestValue - lowestValue;
@@ -70,12 +72,10 @@ function drawChart()
 		//console.log('x = ' + x + ', y = ' + y);
 		var g = "<circle cx="+ x +" cy="+ y +" r='4'></circle>";
 		points += x + ',' + y + ' ';
-
-		circlePoints.innerHTML += g;
+		circlePointsHtml += g;
 	}
-	polyLine.setAttribute("points", points);
-
-
+	circlePoints.html(circlePointsHtml);
+	polyLine.attr("points", points);
 }
 
 function roundUp(num, precision) {
@@ -117,6 +117,7 @@ function findLowestInflationPoint()
 function openGeographyData(GeographyId)
 {
 	//alert(GeographyId);
+	console.log("getting data for: " + GeographyId);
 	promise = httpGet('http://development.analytics.euromonitor.com/Development/Dmitrij.Beseda/IndustryPresenter/PHP/Services/InflationTimeLine.php?GeographyId=' + GeographyId);
 	promise.done(function(data){
 		//console.log(data);

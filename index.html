@@ -1,0 +1,37 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="style.css">
+	<script src="jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="provider.js"></script>
+	<script type="text/javascript" src="chart.js"></script>
+</head>
+
+<body>
+
+<table>
+    <tbody id="tbody"></tbody>
+</table>
+</br>
+
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="graph" aria-labelledby="title" role="img" id="chart">
+  <title id="title">A line chart showing some information</title>
+<g class="grid x-grid" id="xGrid">
+  <line x1="90" x2="90" y1="10" y2="410"></line>
+</g>
+<g class="grid y-grid" id="yGrid">
+  <line x1="90" x2="890" y1="410" y2="410"></line>
+</g>
+<g class="labels x-labels" id="years"></g>
+<g class="labels y-labels" id="inflation"></g>
+<g class="data" data-setname="Our first data set" id="circlePoints"></g>
+<polyline fill="none" stroke="#0074d9" stroke-width="2" id="polyLine"/>
+
+
+
+
+</svg>
+
+	
+</body>
+</html>
